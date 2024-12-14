@@ -28,7 +28,7 @@ function App() {
           <div
             className="absolute w-0.5 bg-red rounded-full"
             style={{
-              height: '48%',
+              height: '45%',
               top: '50%',
               left: '50%',
               transform: `translate(-50%, -100%) rotate(${secondDegree}deg)`, // Combinamos las transformaciones
@@ -38,7 +38,7 @@ function App() {
           <div
             className="absolute w-1 bg-red rounded-full"
             style={{
-              height: '45%',  // Manecilla de minutos más larga
+              height: '40%',  // Manecilla de minutos más larga
               top: '50%',
               left: '50%',
               transform: `translate(-50%, -100%) rotate(${minuteDegree}deg)`,  // Ajuste para rotación de minutos
@@ -62,6 +62,32 @@ function App() {
         <div className="absolute w-8 h-8 bg-brown" style={{
           clipPath: 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)'
         }}></div>
+       {/* Rayitas en el borde del reloj */}
+      {Array.from({ length: 60 }).map((_, i) => {
+        const angle = i * 6; // 6 grados por marca
+        const isMajor = i % 5 === 0; // Cada 5 minutos es una marca más larga
+        const radius = 239; // Radio externo para el posicionamiento correcto
+        const lineLength = isMajor ? 15 : 8; // Marcas largas y cortas
+
+        return (
+          <div
+            key={i}
+            className="absolute bg-red"
+            style={{
+              width: '2px', // Grosor de las líneas
+              height: `${lineLength}px`, // Longitud de cada línea
+              top: '50%',
+              left: '50%',
+              transform: `
+                translate(-50%, -100%) 
+                rotate(${angle}deg) 
+                translateY(-${radius}px)
+              `,
+              transformOrigin: 'center bottom', // Origen de transformación en la base
+            }}
+          ></div>
+        );
+      })}
 
         {/* Números del reloj */}
         {numbers.map((number, index) => {
