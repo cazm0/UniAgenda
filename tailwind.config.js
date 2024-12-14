@@ -12,7 +12,9 @@ export default {
     },
     colors: {
       beige: '#F8EDE3',
-      red: '#C5705D'
+      red: '#C5705D',
+      darkerbeige: '#D0B8A8',
+      brown: '#785f4f'
     },},
   },
   plugins: [],
