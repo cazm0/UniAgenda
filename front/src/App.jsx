@@ -1,8 +1,7 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect} from "react";
 import MovableList from "./ListaTareas";
 function App() {
   const numbers = Array.from({ length: 12 }, (_, i) => i + 1);
-  
   const [time, setTime] = useState(new Date());
   // Actualiza la hora cada segundo
   useEffect(() => {
@@ -19,7 +18,9 @@ function App() {
 
   return (
     <div className="flex items-center justify-center h-screen bg-beige">
-      <div className="relative w-144 h-144 bg-red rounded-full shadow-xl flex items-center justify-center">
+      <div
+        className="absolute w-144 h-144 bg-red rounded-full shadow-xl flex items-center justify-center"
+      >
         {/* Círculo interior beige */}
         <div className="absolute w-128 h-128 bg-beige rounded-full ">
           
@@ -106,8 +107,9 @@ function App() {
             </div>
           );
         })}
+      
       </div>
-      <MovableList bounds="parent"/>
+    <MovableList/>
     </div>
     
   );
