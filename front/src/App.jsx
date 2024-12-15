@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
-
+import MovableList from "./ListaTareas";
 function App() {
   const numbers = Array.from({ length: 12 }, (_, i) => i + 1);
   
   const [time, setTime] = useState(new Date());
-
   // Actualiza la hora cada segundo
   useEffect(() => {
     const interval = setInterval(() => {
@@ -108,7 +107,9 @@ function App() {
           );
         })}
       </div>
+      <MovableList bounds="parent"/>
     </div>
+    
   );
 }
 
