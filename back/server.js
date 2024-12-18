@@ -1,19 +1,28 @@
-import express, { json } from 'express'; // Importa Express
-import cors from 'cors'; // Middleware para manejar CORS
-
+const express = require('express');
 const app = express();
-const PORT = 3001; // El puerto donde correrá el servidor
+app.use(express.json());
 
-// Middlewares
-app.use(cors()); // Habilita CORS
-app.use(json()); // Permite recibir JSON en las solicitudes
+let tasks = [
+  { id: 1, startTime: '10:00', endTime: '12:00', description: 'Reunión' },
+  { id: 2, startTime: '13:00', endTime: '14:00', description: 'Almuerzo' },
+];
 
-// Ruta de prueba
-app.get('/', (req, res) => {
-  res.send('¡El servidor está funcionando correctamente!');
+app.get('/tasks', (req, res) => {
+  res.json(tasks);
 });
 
-// Inicia el servidor
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
+app.post('/tasks', (req, res) => {
+  const { startTime, endTime, description } = req.body;
+  const newTask = {
+    id: tasks.length + 1,
+    startTime,
+    endTime,
+    description,
+  };
+  tasks.push(newTask);
+  res.status(201).json(newTask);
+});
+
+app.listen(3000, () => {
+  console.log('Server running on port 3000');
 });

@@ -1,5 +1,6 @@
 import React, { useState, useEffect} from "react";
 import MovableList from "./ListaTareas";
+import ClockDiagram from "./Tareas";
 function App() {
   const numbers = Array.from({ length: 12 }, (_, i) => i + 1);
   const [time, setTime] = useState(new Date());
@@ -10,7 +11,10 @@ function App() {
     }, 1000);
     return () => clearInterval(interval);
   }, []);
-
+  const [tasks, setTasks] = useState([
+    { id: 1, startTime: "07:00", endTime: "08:00", description: "Reunión" },
+    { id: 2, startTime: "10:00", endTime: "12:00", description: "Almuerzo" },
+  ]);
   // Cálculo de la manecilla de los segundos
   const secondDegree = time.getSeconds() * 6;
   const minuteDegree = new Date().getMinutes() * 6;
@@ -21,8 +25,10 @@ function App() {
       <div
         className="absolute w-144 h-144 bg-red rounded-full shadow-xl flex items-center justify-center"
       >
+        
         {/* Círculo interior beige */}
-        <div className="absolute w-128 h-128 bg-beige rounded-full ">
+        <ClockDiagram tasks={tasks} />
+        <div className="absolute w-128 h-128 rounded-full ">
           
           {/* Manecilla de los segundos */}
           <div
@@ -35,6 +41,7 @@ function App() {
               transformOrigin: 'center bottom', // El origen de la rotación está en el extremo inferior de la manecilla
             }}
           ></div>
+          
           <div
             className="absolute w-1 bg-red rounded-full"
             style={{
@@ -56,6 +63,7 @@ function App() {
             }}
           ></div>
         </div>
+        
         <div className="absolute w-14 h-14 bg-darkerbeige" style={{
           clipPath: 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)'
         }}></div>
@@ -109,7 +117,9 @@ function App() {
         })}
       
       </div>
-    <MovableList/>
+      
+      <MovableList tasks={tasks} setTasks={setTasks} />
+
     </div>
     
   );
