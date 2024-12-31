@@ -8,11 +8,14 @@ const ClockDiagram = ({ tasks }) => {
 
     // Función para calcular el ángulo de acuerdo con el reloj tradicional
     const getAngleForHour = (hour, minute) => {
-      // Las 12:00 son 90 grados, y avanzamos en sentido horario
-      let baseAngle = (hour % 12) * 30; // 12:00 -> 90, 1:00 -> 60, etc.
-      if (baseAngle < 0) baseAngle += 360; // Asegura que el ángulo esté en el rango de 0 a 360 grados
-      const minuteAdjustment = (minute / 60) * 30; // Ajuste de los minutos
-      return baseAngle + minuteAdjustment;  // Restamos el ajuste por los minutos
+      if (hour == 12 & minute ==0){
+        return 360;
+      } else {
+        let baseAngle = (hour % 12) * 30; // 12:00 -> 90, 1:00 -> 60, etc.
+        if (baseAngle < 0) baseAngle += 360; // Asegura que el ángulo esté en el rango de 0 a 360 grados
+        const minuteAdjustment = (minute / 60) * 30; 
+        return baseAngle + minuteAdjustment;
+      }
     };
 
     const startAngle = getAngleForHour(startHour, startMinute);
@@ -42,7 +45,16 @@ const ClockDiagram = ({ tasks }) => {
       y: centerY + radius * Math.sin(angleInRadians),
     };
   };
-
+  const getMidAngle = (startAngle, endAngle) => {
+    return (startAngle + endAngle) / 2;
+  };
+  const getRotTexto = (anguloMedio) => {
+      if ((360>anguloMedio && anguloMedio<180)){
+      return anguloMedio;
+    } else {
+      return anguloMedio-180;
+    };
+  };
   return (
     <div className="absolute w-128 h-128 rounded-full">
       <svg
@@ -51,19 +63,48 @@ const ClockDiagram = ({ tasks }) => {
         style={{ transform: "rotate(-90deg)" }}
       >
         {/* Reloj de fondo */}
-        <circle cx="100" cy="100" r="100" fill="#fff"  />
+        <circle cx="100" cy="100" r="100" fill="#fff" />
 
         {/* Dibujar sectores para cada tarea */}
         {tasks.map((task) => {
-          const { startAngle, endAngle } = getAnglesFromTime(task.startTime, task.endTime);
+          const { startAngle, endAngle } = getAnglesFromTime(
+            task.startTime,
+            task.endTime
+          );
+
+          // Calcular la posición del texto basado en el ángulo promedio
+          const midAngle = getMidAngle(startAngle, endAngle);
+          const rotTexto = getRotTexto(midAngle);
+        
+          const textX =
+            100 + Math.cos((midAngle * Math.PI)*(-1) / 180) * 60; // Reducimos el radio a 60
+          const textY =
+            100 - Math.sin(((midAngle * Math.PI))*(-1) / 180) * 60; // Reducimos el radio a 60
 
           return (
+            <g key={task.id}>
             <path
-              key={task.id}
               d={describeArc(100, 100, 200, startAngle, endAngle)}
-              fill="#f5a623"
+              fill="#FFF2C2"
+              stroke="#DEAA79"
+              strokeWidth="0.2"
               opacity="0.8"
             />
+            
+            {/* Ajustar el tamaño del texto basado en el ángulo del sector */}
+            <text
+              x={textX}
+              y={textY}
+              textAnchor="middle"
+              dominantBaseline="middle"
+              fill="#000"
+              fontSize={Math.max(10, Math.min(12, (endAngle - startAngle) / 10))} // Ajuste dinámico del tamaño del texto
+              transform={`rotate(${rotTexto}, ${textX}, ${textY})`} // Rotar el texto en su centro
+            >
+              {task.description}
+            </text>
+          </g>
+
           );
         })}
       </svg>
