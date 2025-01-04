@@ -1,40 +1,28 @@
-import { Routes, Route } from "react-router-dom";
-import HeaderFooter from "./Components/HeaderFooter";
-import Semana from "./semana";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect} from "react";
 import MovableList from "./ListaTareas";
 import ClockDiagram from "./Tareas";
-
 
 function App() {
   const numbers = Array.from({ length: 12 }, (_, i) => i + 1);
   const [time, setTime] = useState(new Date());
-
+  // Actualiza la hora cada segundo
   useEffect(() => {
     const interval = setInterval(() => {
       setTime(new Date());
     }, 1000);
     return () => clearInterval(interval);
   }, []);
-
   const [tasks, setTasks] = useState([
     { id: 1, startTime: "07:00", endTime: "08:00", description: "Reunión" },
     { id: 2, startTime: "10:00", endTime: "12:00", description: "Almuerzo" },
   ]);
-
+  // Cálculo de la manecilla de los segundos
   const secondDegree = time.getSeconds() * 6;
   const minuteDegree = new Date().getMinutes() * 6;
-  const hourDegree =
-    (new Date().getHours() % 12) * 30 + new Date().getMinutes() * 0.5;
+  const hourDegree = (new Date().getHours() % 12) * 30 + new Date().getMinutes() * 0.5;
 
   return (
-    <HeaderFooter>
-      <Routes>
-        {/* Ruta para Inicio */}
-        <Route
-          path="/"
-          element={
-            <div className="flex items-center justify-center h-screen bg-beige">
+    <div className="flex items-center justify-center h-screen bg-beige">
       <div
         className="absolute w-144 h-144 bg-red rounded-full shadow-xl flex items-center justify-center"
       >
@@ -134,13 +122,7 @@ function App() {
       <MovableList tasks={tasks} setTasks={setTasks} />
 
     </div>
-          }
-        />
-
-        {/* Ruta para Semana */}
-        <Route path="/semana" element={<Semana />} />
-      </Routes>
-    </HeaderFooter>
+    
   );
 }
 
