@@ -1,7 +1,10 @@
 import React, { useState, useEffect} from "react";
-import MovableList from "./ListaTareas";
 import ClockDiagram from "./Tareas";
+import ListadeTareas from "./ListaTareas";
+import { ClipboardDocumentCheckIcon } from "@heroicons/react/24/solid"; // Ícono sólido
+import { ClipboardDocumentCheckIcon as ClipboardDocumentCheckOutline } from "@heroicons/react/24/outline"; // Ícono de contorno
 function App() {
+  const [showTasks, setShowTasks] = useState(false)
   const numbers = Array.from({ length: 12 }, (_, i) => i + 1);
   const [time, setTime] = useState(new Date());
   // Actualiza la hora cada segundo
@@ -21,7 +24,18 @@ function App() {
   const hourDegree = (new Date().getHours() % 12) * 30 + new Date().getMinutes() * 0.5;
 
   return (
+    
     <div className="flex items-center justify-center h-screen bg-beige">
+       <button
+        className="fixed top-4 right-4 bg-red text-white px-4 py-2 rounded shadow-md z-50 flex items-center gap-2"
+        onClick={() => setShowTasks(!showTasks)}
+      >
+        {showTasks ? (
+          <ClipboardDocumentCheckOutline className="w-6 h-6" />
+        ) : (
+          <ClipboardDocumentCheckIcon className="w-6 h-6" />
+        )}
+      </button>
       <div
         className="absolute w-144 h-144 bg-red rounded-full shadow-xl flex items-center justify-center"
       >
@@ -118,7 +132,7 @@ function App() {
       
       </div>
       
-      <MovableList tasks={tasks} setTasks={setTasks} />
+      {showTasks && <ListadeTareas tasks={tasks} setTasks={setTasks} />}
 
     </div>
     
